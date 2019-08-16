@@ -1,6 +1,6 @@
 /**
  * Angular directive/filter/service for formatting date so that it displays how long ago the given time was compared to now.
- * @version v0.4.6 - 2019-08-16
+ * @version v0.4.6 - 2019-08-17
  * @link https://github.com/yaru22/angular-timeago
  * @author Brian Park <yaru22@gmail.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -573,18 +573,19 @@ angular.module('yaru22.angular-timeago').constant('timeAgoSettings', {
   allowFuture: false,
   overrideLang: null,
   fullDateAfterSeconds: null,
+  defaultFormat: 'yyyy-MM-dd',
   strings: {},
   breakpoints: {
-    secondsToMinute: 45, // in seconds
-    secondsToMinutes: 90, // in seconds
-    minutesToHour: 45, // in minutes
+    secondsToMinute: 60, // in seconds
+    secondsToMinutes: 120, // in seconds
+    minutesToHour: 60, // in minutes
     minutesToHours: 90, // in minutes
     hoursToDay: 24, // in hours
-    hoursToDays: 42, // in hours
+    hoursToDays: 48, // in hours
     daysToMonth: 30, // in days
-    daysToMonths: 45, // in days
+    daysToMonths: 60, // in days
     daysToYear: 365, // in days
-    yearToYears: 1.5 // in year
+    yearToYears: 2 // in year
   }
 });
 
@@ -633,6 +634,8 @@ angular.module('yaru22.angular-timeago').factory('timeAgo', ["$filter", "timeAgo
 
   service.inWords = function(distanceMillis, fromTime, format, timezone) {
 
+    format = format ? format : timeAgoSettings.defaultFormat;
+
     var fullDateAfterSeconds = parseInt(timeAgoSettings.fullDateAfterSeconds, 10);
 
     if (!isNaN(fullDateAfterSeconds)) {
@@ -678,7 +681,7 @@ angular.module('yaru22.angular-timeago').factory('timeAgo', ["$filter", "timeAgo
     var years = days / 365;
 
     function substitute(stringOrFunction, number) {
-      number = Math.round(number);
+      number = Math.floor(number);
       var string = angular.isFunction(stringOrFunction) ?
         stringOrFunction(number, distanceMillis) : stringOrFunction;
       var value = ($l.numbers && $l.numbers[number]) || number;

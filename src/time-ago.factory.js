@@ -53,7 +53,7 @@ angular.module('yaru22.angular-timeago').factory('timeAgo', function($filter, ti
     var years = days / 365;
 
     function substitute(stringOrFunction, number) {
-      number = Math.round(number);
+      number = Math.floor(number);
       var string = angular.isFunction(stringOrFunction) ?
         stringOrFunction(number, distanceMillis) : stringOrFunction;
       var value = ($l.numbers && $l.numbers[number]) || number;
