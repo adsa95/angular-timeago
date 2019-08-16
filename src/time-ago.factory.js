@@ -6,6 +6,8 @@ angular.module('yaru22.angular-timeago').factory('timeAgo', function($filter, ti
 
   service.inWords = function(distanceMillis, fromTime, format, timezone) {
 
+    format = format ? format : timeAgoSettings.defaultFormat;
+
     var fullDateAfterSeconds = parseInt(timeAgoSettings.fullDateAfterSeconds, 10);
 
     if (!isNaN(fullDateAfterSeconds)) {

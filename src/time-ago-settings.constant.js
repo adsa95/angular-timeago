@@ -5,6 +5,7 @@ angular.module('yaru22.angular-timeago').constant('timeAgoSettings', {
   allowFuture: false,
   overrideLang: null,
   fullDateAfterSeconds: null,
+  defaultFormat: 'yyyy-MM-dd',
   strings: {},
   breakpoints: {
     secondsToMinute: 45, // in seconds
