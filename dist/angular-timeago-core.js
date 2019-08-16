@@ -1,6 +1,6 @@
 /**
  * Angular directive/filter/service for formatting date so that it displays how long ago the given time was compared to now.
- * @version v0.4.6 - 2017-08-16
+ * @version v0.4.6 - 2019-08-16
  * @link https://github.com/yaru22/angular-timeago
  * @author Brian Park <yaru22@gmail.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -61,14 +61,24 @@ angular.module('yaru22.angular-timeago').directive('timeAgo', ["timeAgo", "nowTi
 
       // Track changes to fromTime
       scope.$watch('fromTime', function() {
-        fromTime = timeAgo.parse(scope.fromTime);
+        fromTime = null;
+        if (!!scope.fromTime) {
+          fromTime = timeAgo.parse(scope.fromTime);
+        }
       });
 
       // Track changes to time difference
       scope.$watch(function() {
-        return nowTime() - fromTime;
+        if (!!fromTime) {
+          return nowTime() - fromTime;
+        }
+        return null;
       }, function(value) {
-        angular.element(elem).text(timeAgo.inWords(value, fromTime, scope.format));
+        var text = '';
+        if (!!value) {
+          text = timeAgo.inWords(value, fromTime, scope.format);
+        }
+        angular.element(elem).text(text);
       });
     }
   };
@@ -181,9 +191,12 @@ angular.module('yaru22.angular-timeago').factory('timeAgo', ["$filter", "timeAgo
 
 angular.module('yaru22.angular-timeago').filter('timeAgo', ["nowTime", "timeAgo", function(nowTime, timeAgo) {
   function timeAgoFilter(value, format, timezone) {
-    var fromTime = timeAgo.parse(value);
-    var diff = nowTime() - fromTime;
-    return timeAgo.inWords(diff, fromTime, format, timezone);
+    if (!!value) {
+      var fromTime = timeAgo.parse(value);
+      var diff = nowTime() - fromTime;
+      return timeAgo.inWords(diff, fromTime, format, timezone);
+    }
+    return null;
   }
   timeAgoFilter.$stateful = true;
   return timeAgoFilter;
